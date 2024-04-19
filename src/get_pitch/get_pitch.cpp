@@ -10,7 +10,7 @@
 
 #include "docopt.h"
 
-#define FRAME_LEN   0.030 /* 30 ms. */
+#define FRAME_LEN   0.034 /* 30 ms. */ ///< Optimitzat per millorar les prestacions
 #define FRAME_SHIFT 0.015 /* 15 ms. */
 
 using namespace std;
@@ -27,6 +27,7 @@ Usage:
 Options:
     -h, --help  Show this screen
     --version   Show the version of the project
+    -1, --alpha1=FLOAT  Llindar decissió [default: 0.5] 
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -46,6 +47,7 @@ int main(int argc, const char *argv[]) {
 
 	std::string input_wav = args["<input-wav>"].asString();
 	std::string output_txt = args["<output-txt>"].asString();
+  float alpha1 = stof(args["--alpha1"].asString());
 
   // Read input sound file
   unsigned int rate;
@@ -59,7 +61,7 @@ int main(int argc, const char *argv[]) {
   int n_shift = rate * FRAME_SHIFT;
 
   // Define analyzer
-  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::RECT, 50, 500);
+  PitchAnalyzer analyzer(n_len, rate, alpha1, PitchAnalyzer::RECT, 50, 500); //Cridem constructor
 
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,

@@ -11,7 +11,15 @@ namespace upc {
   void PitchAnalyzer::autocorrelation(const vector<float> &x, vector<float> &r) const {
 
     for (unsigned int l = 0; l < r.size(); ++l) {
-  		/// \TODO Compute the autocorrelation r[l]
+  		/// \TODO Compute the autocorrelation r[l] 
+      /// \FET Autocorrelació ***computada***  Per afegir missatges al make doc
+      
+      r[l] = 0;
+      // Formula Autocorrelación -> 1/N sum(x[n]*x[n-l])
+      for (unsigned int n = l; n < x.size(); n++){
+        r[l] += x[n]*x[n-l];
+      }      
+      r[l] /= x.size();  
     }
 
     if (r[0] == 0.0F) //to avoid log() and divide zero 
@@ -27,8 +35,14 @@ namespace upc {
     switch (win_type) {
     case HAMMING:
       /// \TODO Implement the Hamming window
+      window.resize(frameLen);
+      for (int i = 0; i < frameLen; ++i) {
+        window[i] = 0.54 - 0.46 * cos(2 * M_PI * i / (frameLen - 1));
+      }
+      /// \FET Finestra de Hamming implementada. Utilitzarem la rectangular ja que funciona millor
       break;
     case RECT:
+        window.assign(frameLen, 1);
     default:
       window.assign(frameLen, 1);
     }
@@ -50,7 +64,23 @@ namespace upc {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
-    return true;
+
+    //qwertyuio ATENCIÓ: Ajustar bé les variables i iterar-ho
+float score = 0;
+    static float power_first_window = 0;
+    static int window = 0;
+    const float potvalue = -46, r1value = 0.5, rmaxvalue = 0.41;
+
+    if (pot < potvalue)
+      score += 0.5;
+    else if (r1norm < r1value)
+      score += 0.5;
+    else if (rmaxnorm < rmaxvalue)
+      score += 0.5;
+    if (score >= 0.5)
+      return true;
+    else
+      return false;
   }
 
   float PitchAnalyzer::compute_pitch(vector<float> & x) const {
@@ -75,6 +105,12 @@ namespace upc {
 	///    - The lag corresponding to the maximum value of the pitch.
     ///	   .
 	/// In either case, the lag should not exceed that of the minimum value of the pitch.
+
+    for (iRMax = iR = r.begin() + npitch_min; iR < r.begin() + npitch_max; iR++){
+      if(*iR > *iRMax){
+        iRMax = iR;
+      }
+    }
 
     unsigned int lag = iRMax - r.begin();
 
