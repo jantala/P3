@@ -60,16 +60,16 @@ namespace upc {
       npitch_max = frameLen/2;
   }
 
-  bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm) const {
+  bool PitchAnalyzer::unvoiced(float pot, float r1norm, float rmaxnorm,float ZCR) const {
     /// \TODO Implement a rule to decide whether the sound is voiced or not.
     /// * You can use the standard features (pot, r1norm, rmaxnorm),
     ///   or compute and use other ones.
 
-    //qwertyuio ATENCIÓ: Ajustar bé les variables i iterar-ho
+    
 float score = 0;
     static float power_first_window = 0;
     static int window = 0;
-    const float potvalue = -46, r1value = 0.5, rmaxvalue = 0.41;
+    const float potvalue = -46, r1value = 0.5, rmaxvalue = 0.41, zcrvalue= 0.1;
 
     if (pot < potvalue)
       score += 0.5;
@@ -77,11 +77,29 @@ float score = 0;
       score += 0.5;
     else if (rmaxnorm < rmaxvalue)
       score += 0.5;
-    if (score >= 0.5)
+    
+    if (ZCR > zcrvalue)
+      score += 0.5;
+
+    if (score >= 1)
       return true;
     else
       return false;
   }
+
+//calul del ZCR
+  float PitchAnalyzer::compute_zcr(const vector<float> &x) const {
+    float suma=0;
+    unsigned int N= x.size();
+    
+     for(int i=1; i<N; i++){
+        if((x[i-1]>=0 && x[i]<=0)||(x[i-1]<=0 && x[i]>=0)){
+        suma=suma+1;
+        }
+        
+    }
+    return (float) (suma)/(2*(N));
+}
 
   float PitchAnalyzer::compute_pitch(vector<float> & x) const {
     if (x.size() != frameLen)
@@ -95,6 +113,8 @@ float score = 0;
 
     //Compute correlation
     autocorrelation(x, r);
+    //Compute ZCR
+    float ZCR= compute_zcr(x);
 
     vector<float>::const_iterator iR = r.begin(), iRMax = iR;
 
@@ -119,12 +139,12 @@ float score = 0;
     //You can print these (and other) features, look at them using wavesurfer
     //Based on that, implement a rule for unvoiced
     //change to #if 1 and compile
-#if 0
+#if 1
     if (r[0] > 0.0F)
-      cout << pot << '\t' << r[1]/r[0] << '\t' << r[lag]/r[0] << endl;
-#endif
+      cout << roundf(pot* 100) / 100.0  << '\t' << roundf(r[1]/r[0]* 100) / 100.0 << '\t' << roundf(r[lag]/r[0]  * 100) / 100.0<< endl;
+#endif 
     
-    if (unvoiced(pot, r[1]/r[0], r[lag]/r[0]))
+    if (unvoiced(pot, r[1]/r[0], r[lag]/r[0],ZCR))
       return 0;
     else
       return (float) samplingFreq/(float) lag;

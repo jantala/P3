@@ -14,19 +14,25 @@ Ejercicios básicos
   `get_pitch`.
 
    * Complete el cálculo de la autocorrelación e inserte a continuación el código correspondiente.
+![alt text](image-3.png)
 
    * Inserte una gŕafica donde, en un *subplot*, se vea con claridad la señal temporal de un segmento de
      unos 30 ms de un fonema sonoro y su periodo de pitch; y, en otro *subplot*, se vea con claridad la
 	 autocorrelación de la señal y la posición del primer máximo secundario.
-
+![alt text](image-1.png)
 	 NOTA: es más que probable que tenga que usar Python, Octave/MATLAB u otro programa semejante para
 	 hacerlo. Se valorará la utilización de la biblioteca matplotlib de Python.
 
+  Hemos hecho la implentación en MATLAB.
+![alt text](image-2.png)
+
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
+![alt text](image-10.png)
+   
 
    * Implemente la regla de decisión sonoro o sordo e inserte el código correspondiente.
-
+![alt text](image-5.png)
    * Puede serle útil seguir las instrucciones contenidas en el documento adjunto `código.pdf`.
 
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del estimador de pitch. El 
@@ -40,7 +46,7 @@ Ejercicios básicos
 		(r[0]), la autocorrelación normalizada de uno (r1norm = r[1] / r[0]) y el valor de la
 		autocorrelación en su máximo secundario (rmaxnorm = r[lag] / r[0]).
 
-    ![alt text](image.png) -> imatge falta escroure descripció
+    ![alt text](image-12.png)
 
 		Puede considerar, también, la conveniencia de usar la tasa de cruces por cero.
 
@@ -50,7 +56,8 @@ Ejercicios básicos
       - Use el estimador de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
 		ilustrativa del resultado de ambos estimadores.
-     
+
+    ![alt text](image.png) -> 
 		Aunque puede usar el propio Wavesurfer para obtener la representación, se valorará
 	 	el uso de alternativas de mayor calidad (particularmente Python).
   
@@ -77,11 +84,17 @@ Ejercicios de ampliación
   Entre las posibles mejoras, puede escoger una o más de las siguientes:
 
   * Técnicas de preprocesado: filtrado paso bajo, diezmado, *center clipping*, etc.
+  ![alt text](image-6.png)
   * Técnicas de postprocesado: filtro de mediana, *dynamic time warping*, etc.
+  ![alt text](image-7.png)
   * Métodos alternativos a la autocorrelación: procesado cepstral, *average magnitude difference function*
     (AMDF), etc.
   * Optimización **demostrable** de los parámetros que gobiernan el estimador, en concreto, de los que
     gobiernan la decisión sonoro/sordo.
+
+    ![alt text](image-8.png)
+    Añadimos el calculo de los cruces por cero a la decision de sonoro/sordo. Ahora la condicion es doble, si la potencia es menor a un umbral y el ZCR es mas alto a otro umbral se considera sordo.
+    ![alt text](image-9.png)
   * Cualquier otra técnica que se le pueda ocurrir o encuentre en la literatura.
 
   Encontrará más información acerca de estas técnicas en las [Transparencias del Curso](https://atenea.upc.edu/pluginfile.php/2908770/mod_resource/content/3/2b_PS%20Techniques.pdf)

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-for alpha1 in $(seq 30 1 50); do
+for alpha1 in $(seq 0.1 0.001 0.11); do
         echo -n "$alpha1: "
         run_get_pitch $alpha1 | grep TOTAL
 done

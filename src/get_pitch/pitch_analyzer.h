@@ -46,8 +46,12 @@ namespace upc {
 	///
 	/// Returns true is the frame is unvoiced
 	///
-    bool unvoiced(float pot, float r1norm, float rmaxnorm) const;
+    bool unvoiced(float pot, float r1norm, float rmaxnorm,float ZCR) const;
 
+  ///
+  /// Calcul del ZCR
+  ///
+    float compute_zcr(const std::vector<float> &x) const;
 
   public:
     PitchAnalyzer(	unsigned int fLen,			///< Frame length in samples
