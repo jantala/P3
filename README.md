@@ -77,6 +77,9 @@ Ejercicios de ampliación
 
   * Inserte un *pantallazo* en el que se vea el mensaje de ayuda del programa y un ejemplo de utilización
     con los argumentos añadidos.
+![alt text](image-15.png)
+
+Per l'execcució del programa, el valor d'alpha1 l'anem canviant per tal d'optimitzar les diferents variables una per una. No n'hem creat més per optimitzar-ho alhora ja que sinó l'execcució del programa hauria estat molt (moltissim) més llarga.
 
 - Implemente las técnicas que considere oportunas para optimizar las prestaciones del sistema de estimación
   de pitch.

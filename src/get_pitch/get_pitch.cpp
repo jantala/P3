@@ -10,7 +10,7 @@
 
 #include "docopt.h"
 
-#define FRAME_LEN   0.034 /* 30 ms. */ ///< Optimitzat per millorar les prestacions
+#define FRAME_LEN   0.031 /* 30 ms. */ ///< Optimitzat per millorar les prestacions
 #define FRAME_SHIFT 0.015 /* 15 ms. */
 
 using namespace std;
@@ -27,7 +27,7 @@ Usage:
 Options:
     -h, --help  Show this screen
     --version   Show the version of the project
-    -1, --alpha1=FLOAT  Llindar decissió [default: 0.5] 
+    -1, --alpha1=FLOAT  Variable a utilitzar unicament per optimitzar paràmetres com FRAME_LEN o els valors de pot, r1, rmax, zcr [default: 0.5] 
 
 Arguments:
     input-wav   Wave file with the audio signal
@@ -40,6 +40,7 @@ int main(int argc, const char *argv[]) {
 	/// \TODO 
 	///  Modify the program syntax and the call to **docopt()** in order to
 	///  add options and arguments to the program.
+  /// \FET
     std::map<std::string, docopt::value> args = docopt::docopt(USAGE,
         {argv + 1, argv + argc},	// array of arguments, without the program name
         true,    // show help if requested
@@ -66,7 +67,9 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
   /// central-clipping or low pass filtering may be used.
-  
+  /// \FET
+
+
   float max_val= *max_element(x.begin(),x.end());
   //Filtre Center Clipping
   for(unsigned int i=0; i< x.size();i++){
@@ -86,6 +89,7 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
   /// or time-warping may be used.
+  /// \FET
 
 unsigned int M = 3;
   vector<float> filtre_mediana(M);
